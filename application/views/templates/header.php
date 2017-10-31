@@ -9,6 +9,16 @@
     <!-- Icons -->
     <link href="node_modules/font-awesome/css/font-awesome.min.css" rel="stylesheet">
     <link href="node_modules/simple-line-icons/css/simple-line-icons.css" rel="stylesheet">
+	<link href="<?php echo base_url(); ?>assets/jquery/jquery-ui.css" rel="stylesheet">  
+	  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	  <script>
+	  $( function() {
+		$( "#datepicker" ).datepicker({
+        showButtonPanel: true
+    });
+	  } );
+	  </script>
 
     <!-- Main styles for this application -->
     <link href="<?php echo base_url(); ?>assets/css/style.css" rel="stylesheet">
@@ -89,21 +99,30 @@
                 <?php endif ?>  
 				<?php if ($this->session->userdata('user_type') == 'superadmin' || $this->session->userdata('user_type') == 'admin'): ?>
 
-                    <!--<li class="nav-item nav-dropdown">
-                        <a class="nav-link nav-dropdown-toggle" href="<?php echo base_url(); ?>displays"><i class="icon-puzzle"></i> Detail</a>
-                    </li>-->
+                    <li class="nav-item nav-dropdown">
+                        <a class="nav-link nav-dropdown-toggle" href="<?php echo base_url(); ?>displays/dashboard"><i class="icon-puzzle"></i> Dashboard</a>
+                    </li>
                     <li class="nav-item nav-dropdown">
                         <a class="nav-link nav-dropdown-toggle" href="<?php echo base_url(); ?>displays/users"><i class="icon-star"></i> Clients</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="<?php echo base_url(); ?>users/register"><i class="icon-calculator"></i> Register New Client </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?php echo base_url(); ?>displays/investmentReports"><i class="icon-calculator"></i> Investment Reports </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?php echo base_url(); ?>displays/profitReports"><i class="icon-calculator"></i> Profit Reports </a>
+                    </li>
                     <!--<li class="nav-item">
                         <a class="nav-link" href="<?php echo base_url(); ?>investments/investment"><i class="icon-pie-chart"></i> Investments</a>
                     </li>-->
 					<?php if ($this->session->userdata('user_type') == 'superadmin'): ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?php echo base_url(); ?>users/create"><i class="icon-pie-chart"></i> Create User</a>
+                        <a class="nav-link" href="<?php echo base_url(); ?>users/create"><i class="icon-pie-chart"></i> Create Admin User</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?php echo base_url(); ?>investments/editPackages"><i class="icon-pie-chart"></i> Edit Packages</a>
                     </li>
 					<?php endif ?>
 					

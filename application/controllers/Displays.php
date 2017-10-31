@@ -41,6 +41,61 @@
 			}
 		}
 		
+		public function dashboard( )
+		{
+			if ($this->session->userdata('logged_in') && ($this->session->userdata('user_type') == 'admin' || $this->session->userdata('user_type') == 'superadmin') ) {
+				//if(!isset($user_id)) { redirect('displays/users'); }
+				$data['title'] = 'Investments Report';
+				
+				$data['investments'] = $this->display_model->get_all_investments();
+				$data['profits'] = $this->display_model->get_all_profits();
+				//$data['user'] = $user_id;
+				
+	            $this->load->view('templates/header');
+	            $this->load->view('displays/all_investments', $data);
+	            $this->load->view('templates/footer');
+				
+			} else {
+				redirect('');
+			}
+		}
+		
+		public function investmentReports () {
+			if ($this->session->userdata('logged_in') && ($this->session->userdata('user_type') == 'admin' || $this->session->userdata('user_type') == 'superadmin') ) {
+				//if(!isset($user_id)) { redirect('displays/users'); }
+				$data['title'] = 'Investments Report';
+				
+				$data['investments'] = $this->display_model->get_all_investments();
+				//$data['profits'] = $this->display_model->get_all_profits();
+				//$data['user'] = $user_id;
+				
+	            $this->load->view('templates/header');
+	            $this->load->view('displays/investment_reports', $data);
+	            $this->load->view('templates/footer');
+				
+			} else {
+				redirect('');
+			}
+		}
+		
+		public function profitReports () {
+			if ($this->session->userdata('logged_in') && ($this->session->userdata('user_type') == 'admin' || $this->session->userdata('user_type') == 'superadmin') ) {
+				//if(!isset($user_id)) { redirect('displays/users'); }
+				$data['title'] = 'Investments Report';
+				
+				//$data['investments'] = $this->display_model->get_all_investments();
+				$data['profits'] = $this->display_model->get_all_profits();
+				//$data['user'] = $user_id;
+				
+	            $this->load->view('templates/header');
+	            $this->load->view('displays/profit_reports', $data);
+	            $this->load->view('templates/footer');
+				
+			} else {
+				redirect('');
+			}
+		}
+		
 		public function my_investments()
 		{
 			if ($this->session->userdata('logged_in') ) {
@@ -173,21 +228,5 @@
 			// 	redirect('');
 			// }
 
-
-
-
-
-
-
 		}
-
-
-
-
-
-
-
-
-
-
 	}

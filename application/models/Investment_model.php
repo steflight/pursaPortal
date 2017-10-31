@@ -8,87 +8,55 @@
 		
 		
 
-		public function invest($client_id, $amount, $payout, $duration)
+		public function invest($client_id, $amount, $payout, $duration, $date)
 		{
-			
 			$duration_time = $duration;
-
 			$current_date = date('l d-m-Y H:i:sa');
-
-			$starting_date = date('l d-m-Y H:i:sa', strtotime('next Monday 8am'));
+			if (date('d', strtotime($date)) < 29) {
+				$date = date('d-m-Y', strtotime($date));
+			} else {
+				$date = date('01-m-Y', strtotime('+5 days', strtotime($date)));
+			}
+			$starting_date = $date;
 
 			// checking first payout date from payout type
-
 			if ($payout == "weekly") {
-				
-
-				if (date('l') == 'Saturday' || date('l') == 'Sunday') {
-					
+				if (date('l') == 'Saturday' || date('l') == 'Sunday') {	
 					$first_payout_date = date('l d-m-Y H:i:sa', strtotime('next Saturday 8am'));
-
 				} else {
-
 					$first_payout_date = date('l d-m-Y H:i:sa', strtotime('2 Saturday 8am'));
-					
 				}
-
 			} else {
-
-				if (date('l') == 'Saturday' || date('l') == 'Sunday') {
-					
-					$first_payout_date = date('l d-m-Y H:i:sa', strtotime('4 Saturday 8am'));
-
+				if (date('d', strtotime($date)) < 29) {
+					$first_payout_date = date('d-m-Y', strtotime('+1 month', strtotime($date)));
 				} else {
-
-					$first_payout_date = date('l d-m-Y H:i:sa', strtotime('5 Saturday 8am'));
-					
+					$first_payout_date = date('01-m-Y', strtotime('+1 month', strtotime($date)));
 				}
-
-
 			}
 
 			// checking last date from duration
-			
 			if ($duration == "3") {
-				
-				if (date('l') == 'Saturday' || date('l') == 'Sunday') {
-					
-					$last_payout_date = date('l d-m-Y H:i:sa', strtotime('12 Saturdays'));
-					
+				if (date('d', strtotime($date)) < 29) {
+					$last_payout_date = date('d-m-Y', strtotime('+3 month', strtotime($date)));
 				} else {
-
-					$last_payout_date = date('l d-m-Y H:i:sa', strtotime('13 Saturdays'));
-					
+					$last_payout_date = date('01-m-Y', strtotime('+3 month', strtotime($date)));
 				}
-
 			}
 
 			if ($duration == "6") {
-				
-				if (date('l') == 'Saturday' || date('l') == 'Sunday') {
-					
-					$last_payout_date = date('l d-m-Y H:i:sa', strtotime('24 Saturdays'));
-					
+				if (date('d', strtotime($date)) < 29) {
+					$last_payout_date = date('d-m-Y', strtotime('+6 month', strtotime($date)));
 				} else {
-
-					$last_payout_date = date('l d-m-Y H:i:sa', strtotime('25 Saturdays'));
-					
+					$last_payout_date = date('01-m-Y', strtotime('+6 month', strtotime($date)));	
 				}
-
 			}
 
 			if ($duration == "12") {
-				
-				if (date('l') == 'Saturday' || date('l') == 'Sunday') {
-					
-					$last_payout_date = date('l d-m-Y H:i:sa', strtotime('48 Saturdays'));
-					
+				if (date('d', strtotime($date)) < 29) {
+					$last_payout_date = date('d-m-Y', strtotime('+12 month', strtotime($date)));
 				} else {
-
-					$last_payout_date = date('l d-m-Y H:i:sa', strtotime('49 Saturdays'));
-					
+					$last_payout_date = date('01-m-Y', strtotime('+12 month', strtotime($date)));
 				}
-
 			}
 
 			// if ($duration == "0") {
@@ -560,37 +528,19 @@
 		{
 			$this->db->where('minimum_amount <=' , $amount);
 			$result = $this->db->get('packages');
-
-
-
-
 			if($result->num_rows() == 3){
-
 				$package_info = array(
-
 					'id' => 3,
 					'name' => 'premium'
-		
-
 				);
-
 				return $package_info;
-
 			}
-
 			if ($result->num_rows() == 2) {
-						
-
 				$package_info = array(
-
 					'id' => 2,
 					'name' => 'business'
-		
-
 				);
-
-				return $package_info;
-						
+				return $package_info;		
 			}
 
 
@@ -601,24 +551,60 @@
 			// }
 
 			if ($result->num_rows() == 1) {
-
 				$package_info = array(
-
 					'id' => 1,
 					'name' => 'starter'
-		
-
 				);
-
 				return $package_info;		
-						
-			} else{
-
+			} else {
 				return false;
 			}
-
 		}
-
+		
+		public function getpackages () {
+			$this->db->order_by('id', 'desc');
+			$result = $this->db->get('packages');
+			return $result->result_array();
+		}
+		
+		public function getinterests ($package_id) {
+			$this->db->order_by('contract_duration', 'asc');
+			$this->db->where('package_id' , $package_id);
+			$result = $this->db->get('interests');
+			return $result->result_array();
+		}
+		
+		public function editpackage($package_id, $min, $mths0, $mths3, $mths6, $mths12) {
+			if($package_id == 1) {
+				$this->db->set('minimum_amount' , $min);
+				$this->db->where('id' , $package_id);
+				$this->db->update('packages');
+				
+				$this->db->set('percentage' , $mths0);
+				$this->db->where('package_id' , $package_id);
+				$this->db->where('contract_duration' , 0);
+				$this->db->update('interests');
+			} else {
+				$this->db->set('minimum_amount' , $min);
+				$this->db->where('id' , $package_id);
+				$this->db->update('packages');
+				
+				$this->db->set('percentage' , $mths3);
+				$this->db->where('package_id' , $package_id);
+				$this->db->where('contract_duration' , 3);
+				$this->db->update('interests');
+				
+				$this->db->set('percentage' , $mths6);
+				$this->db->where('package_id' , $package_id);
+				$this->db->where('contract_duration' , 6);
+				$this->db->update('interests');
+				
+				$this->db->set('percentage' , $mths12);
+				$this->db->where('package_id' , $package_id);
+				$this->db->where('contract_duration' , 12);
+				$this->db->update('interests');
+			}
+		}
 
 		public function get_interest($duration, $payout, $package_id)
 		{
@@ -641,40 +627,42 @@
 
 
 
-		public function generate_profits($client_id, $investment_id, $amount, $duration, $interest)
+		public function generate_profits($client_id, $investment_id, $amount, $duration, $interest, $date)
 		{
 			
 			$percentage = $interest/100;
-
 			$profit = $amount * $percentage;
-
 			$gap = 0;
-
 			$payout_count = 5;
-
+			
+			if (date('d', strtotime($date)) < 29) {
+				$date = date('d-m-Y', strtotime($date));
+			} else {
+				$date = date('01-m-Y', strtotime('+5 days', strtotime($date)));
+			}
+			
+			if($duration == 0) $duration++;
 
 			for ($i=0; $i < $duration; $i++) { 
-
-
 				$gap = $gap + $payout_count;
 
 				//$stamp = '';
 				//$next_payout_date = '';
-				if (date('l') == 'Saturday' || date('l') == 'Sunday') {
+				/*if (date('l') == 'Saturday' || date('l') == 'Sunday') {
 					
-					$next_payout_date = date('l d-m-Y h:i:sa', strtotime($gap.' Saturdays 8am'));
+					//$next_payout_date = date('l d-m-Y h:i:sa', strtotime($gap.' Saturdays 8am'));
 					$stamp = strtotime($gap.' Saturdays 8am');
 					
 				} else {
-
 					$gapplus = $gap + 1;
 
 					$next_payout_date = date('l d-m-Y h:i:sa', strtotime($gapplus.' Saturdays 8am'));
 					$stamp = strtotime($gapplus.' Saturdays 8am');
-					
-				}
-
-
+				}*/
+				$j = $i+1;
+				$str = '+'.$j.' month';
+				$next_payout_date = date('d-m-Y', strtotime($str, strtotime($date)));
+				$stamp = strtotime($str, strtotime($date));
 
 				$data = array(
 
@@ -708,43 +696,20 @@
 			$this->db->where('id', $profit_id);
 			$this->db->update('profits');
 		}
+		
+		public function markProfitAsUnPaid($profit_id)
+		{
+			$this->db->set('validity', 1);
+			$this->db->where('id', $profit_id);
+			$this->db->update('profits');
+		}
+		public function deleteInvestment($investment_id)
+		{
+			//$this->db->set('validity', 1);
+			$this->db->where('id', $investment_id);
+			$this->db->delete('investments');
+			
+			$this->db->where('investment_id', $investment_id);
+			$this->db->delete('profits');		}
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
  ?>

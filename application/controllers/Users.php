@@ -12,6 +12,7 @@
 		    if ($this->session->userdata('logged_in') && $this->session->userdata('user_type') == 'client') {
 				redirect('displays/my_investments');
 			}
+			redirect('displays/dashboard');
 
 			$data['title'] = ucfirst($page);
 

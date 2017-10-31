@@ -92,6 +92,8 @@
 													<a href="<?php echo base_url(); ?>investments/paidprofit/<?php echo $profit['id'].'/'.$user; ?>"><span class="badge badge-warning">Pending</span></a>
 												<?php } else if($profit['validity'] == 1) { ?>
 													<span class="badge badge-warning">Pending</span>
+												<?php } else if ($profit['validity'] == 0 && $this->session->userdata('user_type') == 'superadmin') { ?>
+													<a href="<?php echo base_url(); ?>investments/unpaidprofit/<?php echo $profit['id'].'/'.$profit['client_id']; ?>"><span class="badge badge-success">Paid</span></a>
 												<?php } else { ?>
 													<span class="badge badge-success">Paid</span>
 												<?php } ?>

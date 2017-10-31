@@ -18,7 +18,7 @@
 
                                         <div class="col-sm-12">
 
-                                            <div class="form-group">
+											<div class="form-group">
 												<label>Name</label>
 												<input type="text" class="form-control" name="name" placeholder="Name">
 											</div>

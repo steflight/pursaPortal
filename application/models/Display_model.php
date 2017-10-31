@@ -65,27 +65,35 @@
 			$this->db->order_by('datestamp', 'asc');
 			$result = $this->db->get('profits');
 			if (empty($result->row_array())) {
-				
 				return false;
-
 			} 
-
+			return $result->result_array();
+		}
+		
+		public function get_all_profits() {
+			$this->db->order_by('datestamp', 'asc');
+			$result = $this->db->get('profits');
+			if (empty($result->row_array())) {
+				return false;
+			} 
+			return $result->result_array();
+		}
+		
+		public function get_all_investments() {
+			$result = $this->db->get('investments');
+			if (empty($result->row_array())) {
+				return false;
+			} 
 			return $result->result_array();
 		}
 		
 		public function get_user_investments($client_id)
 		{
-			
 			$this->db->where('client_id',  $client_id);
-
 			$result = $this->db->get('investments');
-
 			if (empty($result->row_array())) {
-				
 				return false;
-
 			} 
-
 			return $result->result_array();
 
 			// if ($result->num_rows() == 1) {
@@ -120,11 +128,6 @@
 
 			// 	return false;
 			// }
-
-
-
-
-
 		}
 
 
