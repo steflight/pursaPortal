@@ -35,12 +35,16 @@
 		                                            </tr>
 		                                        </thead>
 		                                        <tbody>
-														<?php 
-															$totalInvestment =  0;
-															$totalpackages = 0;
+												<?php 
+													$totalInvestment =  0;
+													$totalpackages = 0;
 
-														 ?>
+												 ?>
+												<?php if ($investments === FALSE): ?>
 													
+													<h3>No Investments</h3>
+												<?php else: ?>
+												
 												<?php foreach($investments as $investment) : ?>
 		                                            
 													<?php 
@@ -52,6 +56,8 @@
 													?>
 		                                                
 												<?php endforeach; ?>
+
+												<?php endif ?>
 												<tr>
 													
 	                                                <td><strong><?php echo number_format($totalInvestment, 0, ',', ' ');  ?> F</strong></td>
