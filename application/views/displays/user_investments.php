@@ -17,48 +17,98 @@
 			</div>
 					<div class="row">
 						<div class="col-lg-6">
-                            <div class="card">
-                                <div class="card-header">
-                                    <i class="fa fa-align-justify"></i> Client's Investments
-                                </div>
-                                <div class="card-body">
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th>Amount</th>
-                                                <th>Package</th>
-                                                <th>Duration</th>
-                                                <th>Date</th>
-												<th>Status</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-										<?php if ($investments === FALSE): ?>
+							<div class="row">
+								<div class="col-lg-12">
+		                            <div class="card">
+		                                <div class="card-header">
+		                                    <i class="fa fa-align-justify"></i> <strong>Client Information</strong>
+		                                </div>
+		                                <div class="card-body">
+		                                    <table class="table">
+		                                        <thead>
+		                                            <tr>
+		                                                <th>Total Invested</th>
+		                                                <th>Number of Packages</th>
+		                                                <!-- <th>Duration</th>
+		                                                <th>Date</th>
+														<th>Status</th> -->
+		                                            </tr>
+		                                        </thead>
+		                                        <tbody>
+														<?php 
+															$totalInvestment =  0;
+															$totalpackages = 0;
 
-											<h3>No Investments</h3>
-										<?php else: ?>
-											
-										<?php foreach($investments as $investment) : ?>
-                                            <tr>
-                                                <td><strong><?php echo number_format($investment['amount'], 0, ',', ' ');  ?> F</strong></td>
-                                                <td><strong><?php echo $investment['package_type'];  ?></strong></td>
-                                                <td><strong><?php echo $investment['duration'].' Ms';  ?></strong></td>
-												<td><strong><?php echo date( 'd-m-Y', strtotime($investment['starting_date']));  ?></strong></td>
-                                                <td>
-												<?php if($investment['validity'] == 1) { ?>
-                                                    <span class="badge badge-success">Active</span>
-												<?php } else { ?>
-													<span class="badge badge-warning">Pending</span>
-												<?php } ?>
-                                                </td>
-                                            </tr>
-										<?php endforeach; ?>
-										<?php endif ?>
-                                        </tbody>
-                                    </table>
+														 ?>
+													
+												<?php foreach($investments as $investment) : ?>
+		                                            
+													<?php 
 
-                                </div>
-                            </div>
+
+														$totalInvestment = $totalInvestment + $investment['amount'];
+														$totalpackages++;
+
+													?>
+		                                                
+												<?php endforeach; ?>
+												<tr>
+													
+	                                                <td><strong><?php echo number_format($totalInvestment, 0, ',', ' ');  ?> F</strong></td>
+	                                                <td><strong><?php echo $totalpackages; ?></strong></td>
+	                                            </tr>
+		                                        </tbody>
+		                                    </table>
+
+		                                </div>
+		                            </div>
+								</div>
+
+								<div class="col-lg-12">
+		                            <div class="card">
+		                                <div class="card-header">
+		                                    <i class="fa fa-align-justify"></i> Client's Investments
+		                                </div>
+		                                <div class="card-body">
+		                                    <table class="table">
+		                                        <thead>
+		                                            <tr>
+		                                                <th>Amount</th>
+		                                                <th>Package</th>
+		                                                <th>Duration</th>
+		                                                <th>Date</th>
+														<th>Status</th>
+		                                            </tr>
+		                                        </thead>
+		                                        <tbody>
+												<?php if ($investments === FALSE): ?>
+
+													<h3>No Investments</h3>
+												<?php else: ?>
+													
+												<?php foreach($investments as $investment) : ?>
+		                                            <tr>
+		                                                <td><strong><?php echo number_format($investment['amount'], 0, ',', ' ');  ?> F</strong></td>
+		                                                <td><strong><?php echo $investment['package_type'];  ?></strong></td>
+		                                                <td><strong><?php echo $investment['duration'].' Ms';  ?></strong></td>
+														<td><strong><?php echo date( 'd-m-Y', strtotime($investment['starting_date']));  ?></strong></td>
+		                                                <td>
+														<?php if($investment['validity'] == 1) { ?>
+		                                                    <span class="badge badge-success">Active</span>
+														<?php } else { ?>
+															<span class="badge badge-warning">Pending</span>
+														<?php } ?>
+		                                                </td>
+		                                            </tr>
+												<?php endforeach; ?>
+												<?php endif ?>
+		                                        </tbody>
+		                                    </table>
+
+		                                </div>
+		                            </div>
+								</div>
+							</div>
 						</div>
 						
                         <div class="col-lg-6">
@@ -107,4 +157,7 @@
                                 </div>
                             </div>
 						</div>
+					</div>
+					<div class="row">
+						
 					</div>
