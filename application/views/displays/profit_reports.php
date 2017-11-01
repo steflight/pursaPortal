@@ -28,7 +28,7 @@
                                                 <th>Client Name</th>
 												<th>Amount</th>
                                                 <th>Duration</th>
-                                                <th>Date</th>
+                                                <th>Due Date</th>
 												<th>Status</th>
 												<th>VISA Card No</th>
                                             </tr>

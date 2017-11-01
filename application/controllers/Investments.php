@@ -134,13 +134,13 @@
 
 
 							$this->session->set_userdata('client_package', $package);
-							$invest = $this->investment_model->invest($client_id, $amount, $payout, $duration, $date);
+							$package_id = $package_info['id'];
+							$interest = $this->investment_model->get_interest($duration, $payout, $package_id);
+							$invest = $this->investment_model->invest($client_id, $amount, $payout, $duration, $date, $interest);
 
 							if ($invest) {
 
 								$investment_id = $invest;
-								$package_id = $package_info['id'];
-								$interest = $this->investment_model->get_interest($duration, $payout, $package_id);
 								$generate = $this->investment_model->generate_profits($client_id, $investment_id, $amount, $duration, $interest, $date);
 
 								if ($generate) {

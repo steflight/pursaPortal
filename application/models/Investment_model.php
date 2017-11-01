@@ -8,7 +8,7 @@
 		
 		
 
-		public function invest($client_id, $amount, $payout, $duration, $date)
+		public function invest($client_id, $amount, $payout, $duration, $date, $interest)
 		{
 			$duration_time = $duration;
 			$current_date = date('l d-m-Y H:i:sa');
@@ -99,7 +99,8 @@
 				'starting_date' => $starting_date,
 				'first_payout' => $first_payout_date,
 				'last_payout' => $last_payout_date,
-                'validity' => true
+                'validity' => true,
+				'interest' => $interest
                 
 			);
 
@@ -660,6 +661,7 @@
 					$stamp = strtotime($gapplus.' Saturdays 8am');
 				}*/
 				$j = $i+1;
+				if($j == $duration) { $profit = $profit + $amount; }
 				$str = '+'.$j.' month';
 				$next_payout_date = date('d-m-Y', strtotime($str, strtotime($date)));
 				$stamp = strtotime($str, strtotime($date));
@@ -670,7 +672,7 @@
 					'investment_id' => $investment_id, 
 					'amount' => $profit, 
 					'due_date' => $next_payout_date, 
-					'duration' => $duration, 
+					'duration' => $j.'/"'.$duration, 
 					'validity' => true,
 					'datestamp' => $stamp
 

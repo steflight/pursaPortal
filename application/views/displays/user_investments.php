@@ -16,19 +16,21 @@
 
 			</div>
 					<div class="row">
-						<div class="col-lg-6">
+						<div class="col-lg-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <i class="fa fa-align-justify"></i> Client's Investments
+                                    <i class="fa fa-align-justify"></i> <?php echo $user_info['name']; ?>'s Investments
                                 </div>
                                 <div class="card-body">
                                     <table class="table">
                                         <thead>
                                             <tr>
-                                                <th>Amount</th>
+                                                <th>Contract Date</th>
+												<th>Amount</th>
                                                 <th>Package</th>
                                                 <th>Duration</th>
-                                                <th>Date</th>
+                                                <th>Interest</th>
+												<th>Monthly Dividend</th>
 												<th>Status</th>
                                             </tr>
                                         </thead>
@@ -40,10 +42,12 @@
 											
 										<?php foreach($investments as $investment) : ?>
                                             <tr>
-                                                <td><strong><?php echo number_format($investment['amount'], 0, ',', ' ');  ?> F</strong></td>
+                                                <td><strong><?php echo date( 'd-m-Y', strtotime($investment['starting_date']));  ?></strong></td>
+												<td><strong><?php echo number_format($investment['amount'], 0, ',', ' ');  ?> F</strong></td>
                                                 <td><strong><?php echo $investment['package_type'];  ?></strong></td>
-                                                <td><strong><?php echo $investment['duration'].' Ms';  ?></strong></td>
-												<td><strong><?php echo date( 'd-m-Y', strtotime($investment['starting_date']));  ?></strong></td>
+                                                <td><strong><?php echo $investment['duration'].' Months';  ?></strong></td>
+												<td><strong><?php echo $investment['interest'].'%';  ?></strong></td>
+												<td><strong><?php echo (($investment['interest']*$investment['amount'])/100).' F';  ?></strong></td>
                                                 <td>
 												<?php if($investment['validity'] == 1) { ?>
                                                     <span class="badge badge-success">Active</span>
@@ -60,11 +64,12 @@
                                 </div>
                             </div>
 						</div>
-						
-                        <div class="col-lg-6">
+					</div>
+					<div class="row">
+                        <div class="col-lg-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <i class="fa fa-align-justify"></i> Client's Profits
+                                    <i class="fa fa-align-justify"></i> <?php echo $user_info['name']; ?>'s Profits
                                 </div>
                                 <div class="card-body">
                                     <table class="table">
@@ -72,7 +77,7 @@
                                             <tr>
                                                 <th>Amount</th>
                                                 <th>Duration</th>
-                                                <th>Date</th>
+                                                <th>Due Date</th>
 												<th>Status</th>
                                             </tr>
                                         </thead>
