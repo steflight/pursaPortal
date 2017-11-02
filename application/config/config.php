@@ -24,7 +24,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 //$config['base_url'] = 'http://pursa.co/portal';
-$config['base_url'] = '';
+$config['base_url'] = 'http://localhost/git-pursaPortal';
 
 /*
 |--------------------------------------------------------------------------
