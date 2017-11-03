@@ -78,14 +78,17 @@
 			}
 		}
 		
-		public function profitReports () {
+		public function profitReports ($date = null) {
 			if ($this->session->userdata('logged_in') && ($this->session->userdata('user_type') == 'admin' || $this->session->userdata('user_type') == 'superadmin') ) {
 				//if(!isset($user_id)) { redirect('displays/users'); }
 				$data['title'] = 'Investments Report';
 				
+				if(!$date) $date = $this->input->post('profitsDate');
+				
 				//$data['investments'] = $this->display_model->get_all_investments();
-				$data['profits'] = $this->display_model->get_all_profits();
-				//$data['user'] = $user_id;
+				$data['profits'] = $this->display_model->get_all_profits($date);
+				$data['allProfits'] = $this->display_model->get_all_profits();
+				$data['date'] = $date;
 				
 	            $this->load->view('templates/header');
 	            $this->load->view('displays/profit_reports', $data);

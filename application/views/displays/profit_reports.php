@@ -15,11 +15,37 @@
 				<?php //} ?>				</div>
 
 			</div-->
+					<?php $k=0; $allDate = array();
+					foreach($allProfits as $profit){
+						if(!in_array($profit['datestamp'], $allDate)) {$allDate[$k] = $profit['datestamp']; $k++;}
+					}
+					?>
+					<?php echo form_open('displays/profitReports'); ?>
+					<div class="row">
+						<div class="col-lg-10">
+								<div class="form-group">
+									<label>Select a Date</label>
+									<select name="profitsDate" class="form-control">
+										<option value="">All Dates</option>
+										<?php foreach($allDate as $aDate){ ?>
+											<option value="<?php echo date('d-m-Y', $aDate); ?>"><?php echo date('d-m-Y', $aDate); ?></option>
+										<?php } ?>
+									</select>
+								</div>
+						</div>
+						<div class="col-lg-2">
+							<div class="form-group">
+								<label> &nbsp;</label>
+								<input type="submit"  class="form-control" value="SEARCH">
+							</div>
+						</div>
+					</div>
+					<?php echo form_close(); ?>
 					<div class="row">
                         <div class="col-lg-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <i class="fa fa-align-justify"></i> Profits Reports
+                                    <i class="fa fa-align-justify"></i> Profits Reports<?php if (isset($date)) echo ': '.$date;  ?>
                                 </div>
                                 <div class="card-body">
                                     <table class="table">
@@ -34,7 +60,8 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-										<?php if ($profits === FALSE): ?>
+										<?php $total = 0; 
+											if ($profits === FALSE): ?>
 
 											<h3>No PROFIT</h3>
 										<?php else: ?>
@@ -57,12 +84,13 @@
 													<span class="badge badge-success">Paid</span>
 												<?php } ?>
                                                 </td>
-												<td><?php echo $client_info['visacard']; ?></td>
+												<td><?php echo $client_info['visacard']; $total = $total + $profit['amount']; ?></td>
                                             </tr>
 										<?php endforeach; ?>
 										<?php endif ?>
                                         </tbody>
                                     </table>
+									<span style="float: right"><strong>TOTAL: <?php echo number_format($total, 0, ',', ' ');; ?> FCFA</strong></span>
 
                                 </div>
                             </div>

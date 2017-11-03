@@ -5,7 +5,7 @@
 	</div>
 <?php endif ?>
 
-<?php echo form_open('investments/new_investment'); ?>
+<?php echo form_open('investments/new_investment/'.$client); ?>
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="card">

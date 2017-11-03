@@ -115,9 +115,11 @@
 				
 				// Getting New Investment Id
 
-				$get_id = $this->db->get_where('investments', $data);
+				$this->db->where('issue_date', $current_date);
+				$this->db->where('client_id', $client_id);
+				$get_id = $this->db->get('investments');
 
-				if ($get_id->num_rows() == 1) {
+				if ($get_id->num_rows() > 0) {
 					
 					$id = $get_id->row(0)->id;
 
@@ -125,7 +127,7 @@
 
 				} else {
 
-					return false;
+					return true;
 					
 				}
 			} else {
@@ -525,18 +527,18 @@
 
 
 
-		public function get_package($amount)
+		public function get_package($amount, $duration)
 		{
 			$this->db->where('minimum_amount <=' , $amount);
 			$result = $this->db->get('packages');
-			if($result->num_rows() == 3){
+			if($result->num_rows() == 3 && $duration != 0){
 				$package_info = array(
 					'id' => 3,
 					'name' => 'premium'
 				);
 				return $package_info;
 			}
-			if ($result->num_rows() == 2) {
+			if ($result->num_rows() == 2 && $duration != 0) {
 				$package_info = array(
 					'id' => 2,
 					'name' => 'business'
@@ -551,7 +553,7 @@
 
 			// }
 
-			if ($result->num_rows() == 1) {
+			if ($result->num_rows() == 1 && $duration == 0) {
 				$package_info = array(
 					'id' => 1,
 					'name' => 'starter'
@@ -642,10 +644,11 @@
 				$date = date('01-m-Y', strtotime('+5 days', strtotime($date)));
 			}
 			
+			/*if($duration == 0)*/ $duration++;
 			if($duration == 0) $duration++;
 
 			for ($i=0; $i < $duration; $i++) { 
-				$gap = $gap + $payout_count;
+				//$gap = $gap + $payout_count;
 
 				//$stamp = '';
 				//$next_payout_date = '';
@@ -661,22 +664,24 @@
 					$stamp = strtotime($gapplus.' Saturdays 8am');
 				}*/
 				$j = $i+1;
-				if($j == $duration) { $profit = $profit + $amount; }
-				$str = '+'.$j.' month';
+				//if($j == $duration) { $profit = $profit + $amount; }
+				if($j == $duration) {
+					$str = '+'.$i.' month';
+					$profit = $amount;
+				} else {
+					$str = '+'.$j.' month';
+				}
 				$next_payout_date = date('d-m-Y', strtotime($str, strtotime($date)));
 				$stamp = strtotime($str, strtotime($date));
 
 				$data = array(
-
 					'client_id' => $client_id, 
 					'investment_id' => $investment_id, 
 					'amount' => $profit, 
 					'due_date' => $next_payout_date, 
-					'duration' => $j.'/"'.$duration, 
+					'duration' => $j.'/'.$duration, 
 					'validity' => true,
 					'datestamp' => $stamp
-
-
 					);
 
 

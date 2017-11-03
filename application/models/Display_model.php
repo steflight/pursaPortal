@@ -70,7 +70,8 @@
 			return $result->result_array();
 		}
 		
-		public function get_all_profits() {
+		public function get_all_profits($date = null) {
+			if($date) {$this->db->where('datestamp', strtotime($date));}
 			$this->db->order_by('datestamp', 'asc');
 			$result = $this->db->get('profits');
 			if (empty($result->row_array())) {

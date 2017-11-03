@@ -322,9 +322,28 @@
 			}
 		}
 
+		// Check visacard exists
+		public function check_visacard_exists($visacard){
 
+			if ($this->session->userdata('client_id')) {
+				
+				$query = $this->db->get_where('users', array('visacard' => $visacard, 'id !=' => $this->session->userdata('client_id')));
+				if(empty($query->row_array())){
+				return true;
+				} else {
+					return false;
+				}
+			}
 
-
+			// echo $number." Hahahahaahahahahah";
+			$query = $this->db->get_where('users', array('number' => $number));
+			if(empty($query->row_array())){
+				return true;
+			} else {
+				return false;
+			}
+		}
+		
 		public function check_code_exist($code)
 		{
 			

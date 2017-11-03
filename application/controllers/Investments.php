@@ -34,7 +34,7 @@
 
 
 
-						$package_info = $this->investment_model->get_package($amount);
+						$package_info = $this->investment_model->get_package($amount, $duration);
 
 						if ($package_info) {
 							
@@ -97,12 +97,12 @@
 
 		public function new_investment($client_id = NULL)
 		{
-			if ($client_id == NULL) {
+			if ($client_id != NULL) {
 
 				if ($this->session->userdata('logged_in') && ($this->session->userdata('user_type') == 'admin' || $this->session->userdata('user_type') == 'superadmin') ) {
 
 						$data['title'] = ' New Investment';
-						// $data['code'] = $decoder;
+						$data['client'] = $client_id;
 
 						$this->form_validation->set_rules('amount', 'Amount', 'required');
 						$this->form_validation->set_rules('payout', 'Payout', 'required');
@@ -118,18 +118,18 @@
 							$amount = $this->input->post('amount');
 							$payout = $this->input->post('payout');
 							$duration = $this->input->post('duration');
-							$client_id = $this->session->userdata('client_id');
+							//$client_id = $this->session->userdata('clientsss_id');
 							$date = $this->input->post('date');
-							$package_info = $this->investment_model->get_package($amount);
+							$package_info = $this->investment_model->get_package($amount, $duration);
 
 							if ($package_info) {	
 								$package = $package_info['name'];
 							} else{
 
 								// Set message
-								$this->session->set_flashdata('amount_error', $amount.' FCFA is Lower than the minimun amount.');
+								$this->session->set_flashdata('amount_error', $amount.' or '.$duration.' is not a correct value.');
 
-								redirect('investments/new_investment');
+								redirect('investments/new_investment/'.$client_id);
 							}
 
 
@@ -159,7 +159,7 @@
 
 								redirect('displays/users');	
 							} else {
-								redirect('investments/new_investment');
+								redirect('investments/new_investment/12');
 							}	
 						}
 				} else {
@@ -170,7 +170,7 @@
 				
 			} else{
 
-				$this->session->set_userdata('client_id', $client_id);
+				$this->session->set_userdata('clientsss_id', $client_id);
 				$data['title'] = ' New Investment';
 				$this->load->view('templates/header');
 				$this->load->view('investments/new_investment', $data);
@@ -220,7 +220,7 @@
 
 
 
-						$package_info = $this->investment_model->get_package($amount);
+						$package_info = $this->investment_model->get_package($amount, $duration);
 
 						if ($package_info) {
 							
@@ -369,7 +369,7 @@
 
 
 
-						$package_info = $this->investment_model->get_package($amount);
+						$package_info = $this->investment_model->get_package($amount, $duration);
 
 						if ($package_info) {
 							
@@ -429,7 +429,7 @@
 			{
 				
 				$this->investment_model->markProfitAsPaid($profit_id);
-				redirect('displays/user_investments/'.$user_id);
+				redirect('displays/profitReports');
 				
 			} else {
 				redirect('');
@@ -441,7 +441,7 @@
 			if ($this->session->userdata('logged_in') && ($this->session->userdata('user_type') == 'superadmin') ) 
 			{
 				$this->investment_model->markProfitAsUnPaid($profit_id);
-				redirect('displays/user_investments/'.$user_id);
+				redirect('displays/profitReports');
 			} else {
 				redirect('');
 			}

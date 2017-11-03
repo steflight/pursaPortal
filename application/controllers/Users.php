@@ -29,8 +29,9 @@
 
 				$this->form_validation->set_rules('name', 'Name', 'required');
 				$this->form_validation->set_rules('username', 'Username', 'required|callback_check_username_exists');
-				$this->form_validation->set_rules('email', 'Email', 'required|callback_check_email_exists');
+				$this->form_validation->set_rules('email', 'Email', 'required|valid_email|callback_check_email_exists');
 				$this->form_validation->set_rules('number', 'Number', 'required|callback_check_number_exists');
+				$this->form_validation->set_rules('visacard', 'visacard', 'required|exact_length[10]|callback_check_visacard_exists');
 				$this->form_validation->set_rules('user_type', 'UserType', 'required|callback_check_user_type');
 				// $this->form_validation->set_rules('password', 'Password', 'required');
 				// $this->form_validation->set_rules('password2', 'Confirm Password', 'matches[password]');
@@ -56,41 +57,21 @@
 
 
 					if ($user_info) {
-						
 						$client_id = $user_info['id'];
-
-
 						$this->session->set_userdata('client_id', $client_id);
 						$this->session->set_userdata('client_name', $client_name);
 						$this->session->set_userdata('client_email', $client_email);
 						$this->session->set_userdata('client_number', $client_number);
-
 					} else {
-
 						// $this->session->userdata('client_id');
-
 						$this->session->set_flashdata('user_invalid_details', $this->input->post('user_type')." ".$client_name.' Account Creation Failed');
-
 						redirect('users/register');
 					}
-
-
-
-
 					// Set message
 					$this->session->set_flashdata('user_registered', $this->input->post('user_type').' Account Created Successfully! ');
-
 					redirect('investments');
 				}
-
-
-
-
-
-
-
 			} else {
-
 				redirect('');
 			}
 		}
@@ -151,22 +132,11 @@
 
 						redirect('users/edit');
 					}
-
-
-
-
 					// Set message
 					$this->session->set_flashdata('user_registered', $this->input->post('user_type').' Account Edited Successfully!');
 
 					redirect('investments/edit');
 				}
-
-
-
-
-
-
-
 			} else {
 
 				// Set message
@@ -222,14 +192,6 @@
 					}
 
 				}
-
-
-
-
-
-
-
-
 			} else{
 
 				redirect('');
@@ -299,13 +261,13 @@
 					// Set message
 					$this->session->set_flashdata('user_loggedin', 'You are now logged in');
 
-					redirect('');
+					redirect('users/home');
 
 				} else {
 					// Set message
 					$this->session->set_flashdata('login_failed', 'Login is invalid try again');
 
-					redirect('users/login');
+					redirect('users/home');
 				}		
 			}
 		}
@@ -517,17 +479,6 @@
 
 		}
 
-
-
-
-
-
-
-
-
-
-
-
 		// Validation functions
 
 		// Check if username exists
@@ -574,7 +525,21 @@
 				redirect('');
 			}
 		}
+		
+		// Check if visacard exists
+		public function check_visacard_exists($visacard){
+			if ($this->session->userdata('logged_in') && ($this->session->userdata('user_type') == 'admin' || $this->session->userdata('user_type') == 'superadmin') ) {
+				$this->form_validation->set_message('check_visacard_exists', 'That VISA card number is already registered. Please choose a different one');
+				if($this->user_model->check_visacard_exists($visacard)){
+					return true;
+				} else {
+					return false;
+				}
+			} else{
 
+				redirect('');
+			}
+		}
 
 		// Check if number exists
 		public function check_user_type($user_type){
